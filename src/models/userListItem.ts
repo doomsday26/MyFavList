@@ -1,6 +1,6 @@
 import mongoose,{Types} from 'mongoose'
 
-const userListItem= new mongoose.Schema({
+const userListItemSchema= new mongoose.Schema({
   userId: {
     type: Types.ObjectId,
     required: true
@@ -17,8 +17,8 @@ const userListItem= new mongoose.Schema({
   }
 },{timestamps:true})
 
-
-export default mongoose.model<IUserListItem>('userListItem',userListItem)
+userListItemSchema.index({ userId: 1, contentId: 1 });
+export default mongoose.model<IUserListItem>('userListItem',userListItemSchema)
 
 export interface IUserListItem extends mongoose.Document {
   userId: Types.ObjectId;

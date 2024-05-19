@@ -40,7 +40,7 @@ await redisClient.srem(`user:${userId}:list`, `${contentId}`);
 }
 export const addAllItemsToCachedList= async(userId:string,contentIds:string[]):Promise<void> => {
 await redisClient.sadd(`user:${userId}:list`,contentIds);
-await redisClient.expire(`user:${userId}:list`, 60 *10);
+await redisClient.expire(`user:${userId}:list`, 60 *60*10);
 }
 export const getCachedUserList= async(userId:string):Promise<string[]> => {
 const userList = await redisClient.smembers(`user:${userId}:list`);
