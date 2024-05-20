@@ -6,8 +6,7 @@ import {data} from '../utils/dummyContent'
 
 
 export const getContent=async(req:authenticatedRequest,res:Response,next:NextFunction):Promise<void>=>{
-console.log(req.user);
-console.log('inside the content controller')
+// console.log(req.user);
     let contentDetails= await ContentService.getAllContent()
     res.status(200).json(contentDetails);
    // next(contentDetails)

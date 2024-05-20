@@ -1,4 +1,4 @@
- import asyncHandler  from 'express-async-handler';
+ import {asyncHandler}  from '../utils/asyncHandler';
 import { Router } from 'express';
 import { createUser, getUserDetails,} from '../controllers/user.controllers';
 import { isAuthenticated } from '../middleware/auth';

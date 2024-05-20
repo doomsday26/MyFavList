@@ -1,4 +1,4 @@
-import asyncHandler  from 'express-async-handler';
+import {asyncHandler}  from '../utils/asyncHandler';
 import { Router } from 'express';
 import {createContent,createDummyContent,getContent} from '../controllers/content.controller';
 import { isAuthenticated } from '../middleware/auth';

@@ -10,7 +10,7 @@ export const getUserDetails=async(req:authenticatedRequest,res:Response,next:Nex
     next(userDetails)
 }
 export const createUser=async(req:Request,res:Response, next:NextFunction):Promise<void>=>{
-    console.log(req.body);
+    // console.log(req.body);
     const { username,email,img,googleId,phoneNumber,password} = req.body
 
     let userDetails= await UserService.createUser({username, email, img, googleId, phoneNumber, password})

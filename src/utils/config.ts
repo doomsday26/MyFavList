@@ -12,6 +12,7 @@ const DEFAULT_SORT=process.env.DEFAULT_SORT
 const REDIS_HOST=process.env.REDIS_HOST
 const REDIS_PORT=process.env.REDIS_PORT
 const REDIS_URL=process.env.REDIS_URL
+const ENV='dev'
 export default{
 MONGO_URL,
 PORT,
@@ -21,5 +22,6 @@ DEFAULT_QUERY_LIMIT,
 DEFAULT_SORT,
 REDIS_HOST,
 REDIS_PORT,
-REDIS_URL
+REDIS_URL,
+ENV
 }
