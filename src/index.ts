@@ -5,8 +5,9 @@ import cors from 'cors'
 import userRouter from './routes/user.route';
 import listItemRouter from './routes/userListItem.route'
 import contentRouter from './routes/content.route';
+import path from 'path';
 const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('../../server/swagger_output.json')
+const swaggerFile = require('../swagger_output.json')
 
 connectDB()
 const app = express();

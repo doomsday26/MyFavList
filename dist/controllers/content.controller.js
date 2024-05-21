@@ -16,8 +16,7 @@ exports.createDummyContent = exports.createContent = exports.getContent = void 0
 const content_service_1 = __importDefault(require("../services/content.service"));
 const dummyContent_1 = require("../utils/dummyContent");
 const getContent = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.user);
-    console.log('inside the content controller');
+    // console.log(req.user);
     let contentDetails = yield content_service_1.default.getAllContent();
     res.status(200).json(contentDetails);
     // next(contentDetails)

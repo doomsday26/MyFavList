@@ -17,8 +17,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = __importDefault(require("./config"));
 function connectDB() {
     return __awaiter(this, void 0, void 0, function* () {
+        let uri = process.env.DEPL_TYPE == 'dev' ? config_1.default.MONGO_URL : `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${process.env.MONGO_INITDB_DATABASE}?authSource=admin`;
+        console.log("uri>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", { uri });
         try {
-            const con = yield mongoose_1.default.connect(config_1.default.MONGO_URL, {
+            const con = yield mongoose_1.default.connect(uri, {
                 serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
                 socketTimeoutMS: 45000, // Increase socket timeout to 45 seconds
                 // useNewUrlParser: true,

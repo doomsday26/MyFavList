@@ -22,7 +22,7 @@ const getUserDetails = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.getUserDetails = getUserDetails;
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+    // console.log(req.body);
     const { username, email, img, googleId, phoneNumber, password } = req.body;
     let userDetails = yield user_service_1.default.createUser({ username, email, img, googleId, phoneNumber, password });
     next(userDetails);

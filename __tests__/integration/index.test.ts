@@ -20,8 +20,7 @@ it('GET / userList',async()=>{
     const responseList= await request(app).get('/listItem/')
     expect(responseList.status).toBe(200);
     expect(responseList.body).not.toBeNull();
-
-
+    expect(Array.isArray(responseList.body)).toBe(true);
 
 })
 

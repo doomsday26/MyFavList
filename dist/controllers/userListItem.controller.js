@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeFromList = exports.addToList = exports.getUserList = void 0;
 const userListItem_service_1 = __importDefault(require("../services/userListItem.service"));
 const config_1 = __importDefault(require("../utils/config"));
+const mongoose_1 = require("mongoose");
 const { DEFAULT_PAGE, DEFAULT_QUERY_LIMIT, DEFAULT_SORT } = config_1.default;
 const getUserList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
@@ -26,25 +27,28 @@ const getUserList = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     const isFavourite = (_b = req.body) === null || _b === void 0 ? void 0 : _b.isFavourite;
     const userId = String((_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c._id);
     // const contentId = String(req.params.contentId);
-    console.log({ userId, isFavourite, genre, skip, limit, sort });
+    // console.log({userId,isFavourite,genre,skip,limit,sort})
     const response = yield userListItem_service_1.default.getUsersList({ userId, isFavourite, genre, skip, limit, sort });
     if (!(response === null || response === void 0 ? void 0 : response.length))
         res.status(404).json({ message: 'no content found' });
-    res.status(200).json(response);
+    return res.status(200).json(response);
 });
 exports.getUserList = getUserList;
 const addToList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _d;
-    const userId = String((_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id);
-    const contentId = String(req.params.contentId);
-    console.log({ userId, contentId });
-    const response = yield userListItem_service_1.default.addUserListItem(userId, contentId);
-    res.status(200).json({ message: 'successsfully added in the list', success: true });
+    const userId = new mongoose_1.Types.ObjectId(String((_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id));
+    const contentId = new mongoose_1.Types.ObjectId(req.params.contentId);
+    const { title, description } = req.body;
+    // console.log({userId, contentId})
+    const ItemData = { userId: userId, contentId: contentId, title: String(title), description: String(description) };
+    const updatedList = yield userListItem_service_1.default.addUserListItem(ItemData);
+    return res.status(200).json({ message: 'successsfully added in the list', success: true, updatedList });
 });
 exports.addToList = addToList;
 const removeFromList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e;
     const listItemId = String(req.params.listItemId);
-    const response = yield userListItem_service_1.default.deleteUserListItem(listItemId);
-    res.status(200).json({ message: 'successsfully removed from the list', success: true });
+    const response = yield userListItem_service_1.default.deleteUserListItem(String((_e = req.user) === null || _e === void 0 ? void 0 : _e._id), listItemId);
+    return res.status(200).json({ message: 'successsfully removed from the list', success: true, newList: response });
 });
 exports.removeFromList = removeFromList;

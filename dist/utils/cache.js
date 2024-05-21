@@ -12,9 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCachedUserList = exports.addAllItemsToCachedList = exports.removeFromCacheList = exports.addToCacheList = exports.isMemberOfCacheList = void 0;
+exports.getCachedUserList = exports.addAllItemsToCachedList = exports.checkUserListCache = exports.updateList = exports.addToCacheList = void 0;
+const config_1 = __importDefault(require("./config"));
 const ioredis_1 = __importDefault(require("ioredis"));
-const redisURL = process.env.REDIS_URL || "redis://localhost:6379";
+const redisURL = config_1.default.REDIS_URL || "redis://localhost:6379";
+// const redisHost = process.env.REDIS_HOST || 'redis';
+// const redisPort = parseInt(config.REDIS_PORT, 10) || 6379;
 const redisClient = new ioredis_1.default(redisURL);
 // Redis client options
 // const redisOptions :RedisClientOptions= {
@@ -28,27 +31,48 @@ const redisClient = new ioredis_1.default(redisURL);
 redisClient.on('error', (err) => {
     console.error('Redis client error:', err);
 });
-const isMemberOfCacheList = (userId, contentId) => __awaiter(void 0, void 0, void 0, function* () {
-    const isMember = yield redisClient.sismember(`user:${userId}:list`, `${contentId}`);
-    return isMember;
-});
-exports.isMemberOfCacheList = isMemberOfCacheList;
-const addToCacheList = (userId, contentId) => __awaiter(void 0, void 0, void 0, function* () {
-    yield redisClient.sadd(`user:${userId}:list`, `${contentId}`);
+// export const isMemberOfCacheList = async (userId: string, contentId: string):Promise<number> => {
+// const isMember = await redisClient.sismember(`user:${userId}:list`,`${contentId}`);
+// return isMember;
+// }
+const addToCacheList = (userId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    yield redisClient.setex(`${userId}`, 60 * 60 * 10, data);
 });
 exports.addToCacheList = addToCacheList;
-const removeFromCacheList = (userId, contentId) => __awaiter(void 0, void 0, void 0, function* () {
-    yield redisClient.srem(`user:${userId}:list`, `${contentId}`);
+// export const removeFromCacheList=async (userId: string, contentId: string,data:string):Promise<void> => {
+// console.log(userId,contentId)
+// const key = `${userId}:${contentId}`;
+// const result = await redisClient.del(key,data);
+// console.log({result});
+// }
+const updateList = (userId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    //check if there is any data in cache
+    // console.log('adding to the list')
+    let list = yield redisClient.exists(userId);
+    if (list) {
+        yield redisClient.del(userId);
+    }
+    return yield redisClient.setex(`${userId}`, 60 * 60 * 10, data);
 });
-exports.removeFromCacheList = removeFromCacheList;
-const addAllItemsToCachedList = (userId, contentIds) => __awaiter(void 0, void 0, void 0, function* () {
-    yield redisClient.sadd(`user:${userId}:list`, contentIds);
-    yield redisClient.expire(`user:${userId}:list`, 60 * 10);
+exports.updateList = updateList;
+const checkUserListCache = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield redisClient.exists(userId);
+});
+exports.checkUserListCache = checkUserListCache;
+const addAllItemsToCachedList = (userId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    yield redisClient.set(`${userId}`, data);
 });
 exports.addAllItemsToCachedList = addAllItemsToCachedList;
 const getCachedUserList = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userList = yield redisClient.smembers(`user:${userId}:list`);
-    return userList;
+    let list = yield redisClient.get(userId);
+    // console.log({list})   
+    if (!list)
+        return [];
+    else {
+        const parsedList = JSON.parse(list);
+        //  console.log({parsedList})
+        return parsedList;
+    }
 });
 exports.getCachedUserList = getCachedUserList;
 //             // Remove from Redis set

@@ -20,8 +20,6 @@ if(!sort)sort=-1;
         { $limit: limit }, // Limit the result to 10 documents
         {$project:{contentId:1,title:1,description:1}}
     ])
-// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-//  console.log(userListItems)
 
    
     return userListItems;
@@ -32,8 +30,6 @@ if(!sort)sort=-1;
 
 async addToUserList(userId: Types.ObjectId,contentId:Types.ObjectId,title:String,description:String): Promise<IUserListItem|null> {
 let item= await this._model.create({userId, contentId,title,description});
-//if(item) addToCacheList(String(userId),String(contentId),JSON.stringify({title:title,description:description})) 
-// console.log({addedItem:item})
 return item;
   }
   async getListItem(userId: Types.ObjectId,contentId:Types.ObjectId): Promise<IUserListItem|null> {

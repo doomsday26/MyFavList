@@ -36,15 +36,15 @@ export const loginValidator = [
   validateRequest,
 ];
 
-export const getUserSubmissionValidator = [
-  check('submissionId').isMongoId().withMessage('invalid submissionId'),
+export const deleteContentValidator = [
+  check('listItemId').notEmpty().isMongoId().withMessage('listItemId is either not provided or is invalid'),
   validateRequest
 ];
 
 
 export const userListItemValidator=[
-  check('contentId').isMongoId().withMessage('invalid contentId'),
-  check('title').notEmpty().withMessage('name is required'),
+  check('contentId').notEmpty().isMongoId().withMessage('content id is either not provided or is invalid'),
+  check('title').notEmpty().withMessage('title is required'),
   check('description').notEmpty().withMessage('description is required'),
   validateRequest
 ];

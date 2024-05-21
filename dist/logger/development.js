@@ -23,24 +23,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importStar(require("mongoose"));
-const userListItemSchema = new mongoose_1.default.Schema({
-    userId: {
-        type: mongoose_1.Types.ObjectId,
-        required: true
-    },
-    contentId: {
-        type: mongoose_1.Types.ObjectId,
-        required: true
-    },
-    isFaovourite: {
-        type: Boolean,
-    },
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    genre: {
-        type: String,
-    }
-}, { timestamps: true });
-userListItemSchema.index({ userId: 1, contentId: 1 });
-exports.default = mongoose_1.default.model('userListItem', userListItemSchema);
+const winston_1 = __importStar(require("winston"));
+const { combine, timestamp, printf } = winston_1.format;
+const myFormat = printf(({ level, message, timestamp }) => {
+    return `${level} ${timestamp} : ${message}`;
+});
+exports.default = winston_1.default.createLogger({
+    level: 'debug',
+    format: combine(winston_1.format.colorize(), timestamp({ format: 'HH:mm:ss' }), myFormat),
+    transports: [
+        new winston_1.default.transports.Console(),
+        new winston_1.default.transports.File({ filename: 'error.log' }),
+    ],
+});
