@@ -1,0 +1,73 @@
+download the zipped code from the github repo
+since this is a dockerized app, make sure you have docker installed in it.
+start the docker desktop.
+follow the steps,
+1) open code with vs code.
+2) in command line type cd server/
+3) execute command docker-compose up
+your code is up and running to check if it is up 
+open your chrome browser and search link type 'http://localhost:3000/health', if you see 
+{
+  "status": "ok"
+}
+that means code is working fine.
+
+if not, then do check the docker desktop if any container of redis or mongo is up, if there are conglicting container ports, it will not work, make sure of that.
+
+to see the apis present,
+you can search for 'http://localhost:3000/doc/' it will list all the apis, if it doesn't works no issues we will use postman.
+
+
+//postman
+
+4) now we have to create the dummy data, the dummy data is already present, you just have to hit teh route.
+'localhost:3000/content/dummy' in the postman
+this will automatically create the dummy data.
+
+5) check the data is created or not, you can hit 'localhost:3000/content/' now you have got all the content. in form of the array.
+
+5) now to add items in the users list, take _id,title and description form any of the list data from the content created.
+after that, 
+'localhost:3000/listItem/add/:contentId' hit this route, with {description and title } in request body.
+example :
+contentId:664c20cf42b4d2439ba57bb6
+{
+         "title": "Haunted Manor",
+        "description": "A spine-chilling horror story set in an old haunted manor."
+}
+
+if any of the fields is missing then the calidator will throw the error.
+you will get the response
+{
+    "message": "successsfully added in the list",
+    "success": true,
+    "updatedList": [
+        {
+            "_id": "664c306273a4a81de67816dd",
+            "contentId": "664c2cec73a4a81de6781694",
+            "title": "The Great Adventure",
+            "description": "An epic adventure of a group of explorers in a mysterious land."
+        }
+    ]
+}
+
+6) now to get the list hit the route  'localhost:3000/listItem/'
+you will get the list, if you hit multiple times, the result will be fatster as it is taking from the cache.
+
+7)  to remove a list item hit the route  'localhost:3000/listItem/:listItemId'
+where listItemId is the _id you get from the myList.
+ex : [
+    {
+        "_id": "664c306273a4a81de67816dd",
+        "contentId": "664c2cec73a4a81de6781694",
+        "title": "The Great Adventure",
+        "description": "An epic adventure of a group of explorers in a mysterious land."
+    }
+]
+ the _id field of the userList containing list items.
+
+
+
+you can repeat the process of adding and deleting the list items prenent in the db in step no.5. 
+
+thank you. 
