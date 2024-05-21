@@ -3,7 +3,7 @@ import config from "./config";
 
 export async function connectDB(): Promise<unknown> {
 let uri = process.env.DEPL_TYPE=='dev' ?config.MONGO_URL:`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${process.env.MONGO_INITDB_DATABASE}?authSource=admin`
-console.log("uri>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",{uri});   
+
  
 try {
     const con = await mongoose.connect(uri, {
